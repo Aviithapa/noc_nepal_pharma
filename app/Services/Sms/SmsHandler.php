@@ -13,7 +13,7 @@ class SmsHandler
         $url = "https://api.sparrowsms.com/v2/sms/"; // Replace with your SMS API endpoint
 
          $args = http_build_query(array(
-            'token' => 'v2_a5XZw9x0WlAb27BaZBwcmYpmJYo.3Ogo',
+            'token' => 'v2_mV7koKuLlSCUjZverAxLc5VmUPm.YhKg',
             'from' => 'TheAlert',
             'to' => $to,
             'text' => $message,

@@ -115,7 +115,7 @@
                         </a>
                     </li>
 
-                    <li class="side-nav-item">
+                    {{-- <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
                             <i class="bi-card-checklist"></i>
                             <span> Noc / Good Standing </span>
@@ -131,25 +131,25 @@
                                 </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> --}}
 
                   
 
                     <li class="side-nav-item">
-                        <a href="{{ route('dashboard.site-settings.index') }}" class="side-nav-link">
+                        <a href="{{ url('cms/noc-main') }}" class="side-nav-link">
                             <i class="bi-gear"></i>
-                            <span> Site Settings </span>
+                            <span> Noc Management </span>
                         </a>
                     </li>
 
                     
 
-                    <li class="side-nav-item">
+                    {{-- <li class="side-nav-item">
                         <a href="{{ url('cms/news') }}" class="side-nav-link">
                             <i class="bi-book"></i>
                             <span> News Management </span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     
                     {{-- <li class="side-nav-item">
@@ -201,12 +201,12 @@
                         </a>
                     </li> --}}
 
-                    <li class="side-nav-item">
+                    {{-- <li class="side-nav-item">
                         <a href="{{ url('cms/college') }}" class="side-nav-link">
                             <i class="bi-building"></i>
                             <span>College Management </span>
                         </a>
-                    </li>
+                    </li> --}}
 
 
                     {{-- <li class="side-nav-item">
@@ -216,7 +216,7 @@
                         </a>
                     </li> --}}
 
-                    <li class="side-nav-item">
+                    {{-- <li class="side-nav-item">
                         <a href="{{ url('cms/post') }}" class="side-nav-link">
                             <i class="bi-file-earmark-post"></i>
                             <span> Post Management </span>
@@ -228,7 +228,7 @@
                             <i class="bi-gear"></i>
                             <span> Password Change </span>
                         </a>
-                    </li>
+                    </li> --}}
                     
                 </ul>
                 <!--- End Sidemenu -->

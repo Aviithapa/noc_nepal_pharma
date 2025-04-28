@@ -52,30 +52,7 @@
                     </div>
         
                     <!-- Uncomment the items below as needed -->
-        
-                    {{-- <!-- item-->
-                    <a href="pages-profile.html" class="dropdown-item">
-                        <i class="bi bi-person fs-18 align-middle me-1"></i>
-                        <span>My Account</span>
-                    </a>
-        
-                    <!-- item-->
-                    <a href="pages-profile.html" class="dropdown-item">
-                        <i class="bi bi-gear fs-18 align-middle me-1"></i>
-                        <span>Settings</span>
-                    </a>
-        
-                    <!-- item-->
-                    <a href="pages-faq.html" class="dropdown-item">
-                        <i class="bi bi-headset fs-18 align-middle me-1"></i>
-                        <span>Support</span>
-                    </a>
-        
-                    <!-- item-->
-                    <a href="auth-lock-screen.html" class="dropdown-item">
-                        <i class="bi bi-lock fs-18 align-middle me-1"></i>
-                        <span>Lock Screen</span>
-                    </a> --}}
+    
         
                     <!-- item-->
                     <a href="{{ route('logout') }}" class="dropdown-item">
@@ -115,7 +92,7 @@
                 </a>
             </li>
 
-            <li class="side-nav-item">
+            {{-- <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
                     <i class="bi-card-checklist"></i>
                     <span> Noc / Good Standing </span>
@@ -131,16 +108,16 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li> --}}
 
             <li class="side-nav-item">
-                <a href="{{ route('dashboard.workflow') }}" class="side-nav-link">
+                <a href="{{ url('cms/noc-main') }}" class="side-nav-link">
                     <i class="bi-funnel"></i>
-                    <span> Work Flow </span>
+                    <span> Noc Management </span>
                 </a>
             </li>
 
-            <li class="side-nav-item">
+            {{-- <li class="side-nav-item">
                 <a href="{{ url('cms/m-phamacy') }}" class="side-nav-link">
                     <i class="bi-file"></i>
                     <span> M. Pharma </span>
@@ -262,7 +239,7 @@
                     <i class="bi-gear"></i>
                     <span> Settings </span>
                 </a>
-            </li>
+            </li> --}}
 
 
             
