@@ -129,65 +129,59 @@ class NocController extends Controller
         
         try {
             DB::beginTransaction();
-    
-            // Generate UUID
-            $data['uuid'] = \Ramsey\Uuid\Uuid::uuid4()->toString();
-    
-            // Get next auto-incremented ref from the database
-            $data['status'] = 'approved'; // Default status
-            
+        
             $nocData = $this->nocApplicationRepository->findOrFail($id);
-    
-            $invoicesPath = storage_path('app/public/noc/' . $nocData->id);
-            if (!file_exists($invoicesPath)) {
-                mkdir($invoicesPath, 0755, true);
+        
+            $uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
+            $pdf_file_name = 'noc_' . $uuid . '.pdf';
+            $pdf_path = storage_path("app/public/noc/{$nocData->id}");
+            $pdf_link = "noc/{$nocData->id}/{$pdf_file_name}";
+            $qr_url = "storage/{$pdf_link}";
+        
+            if (!file_exists($pdf_path)) {
+                mkdir($pdf_path, 0755, true);
             }
-    
-            $pdf_file_name = 'noc_' . $data['uuid'] . '.pdf';
-            $pdf_url = 'noc/'. $nocData->id . '/' . $pdf_file_name;
-            $qr_url = 'storage/noc/'. $nocData->id . '/' . $pdf_file_name;
-
+        
             $url = url($qr_url);
-            $qrCode = QrCode::size(100)->generate($url);
-            $qrCodeBase64 = 'data:image/png;base64,' . base64_encode($qrCode);
-            $dobFormatted = Carbon::parse($nocData->dob_ad)->format('d M Y');
-
-            if($nocData->good_standing){
-                $pdf = Pdf::loadView('admin.pages.cms.noc.good_standing', [
-                    'nocData' => $nocData,
-                    'currentDate' => Carbon::now()->format('d-m-Y'),
-                    'qrCode' => $qrCodeBase64,
-                    'dob' => $dobFormatted
-                ]);
-
-            }else{
-                $pdf = Pdf::loadView('admin.pages.cms.noc.noc_registration', [
-                    'nocData' => $nocData,
-                    'currentDate' => Carbon::now()->format('Y-m-d'),
-                    'qrCode' => $qrCodeBase64
-                ]);
+            $qrCodeBase64 = 'data:image/png;base64,' . base64_encode(QrCode::format('png')->size(100)->generate($url));
+        
+            $view = $nocData->good_standing ? 'admin.pages.cms.noc.good_standing' : 'admin.pages.cms.noc.noc_registration';
+            $data = [
+                'nocData' => $nocData,
+                'currentDate' => Carbon::now()->format($nocData->good_standing ? 'd-m-Y' : 'Y-m-d'),
+                'qrCode' => $qrCodeBase64,
+            ];
+            if ($nocData->good_standing) {
+                $data['dob'] = Carbon::parse($nocData->dob_ad)->format('d M Y');
             }
-
-            $pdf->save($invoicesPath . '/' . $pdf_file_name);
-            $data['pdf_link'] = $pdf_url;
-    
-            $banner = $this->nocApplicationRepository->update($id, $data);
+        
+            Pdf::loadView($view, $data)->save("{$pdf_path}/{$pdf_file_name}");
+        
+            $updateData = [
+                'uuid' => $uuid,
+                'status' => 'approved',
+                'pdf_link' => $pdf_link
+            ];
+        
+            $banner = $this->nocApplicationRepository->update($id, $updateData);
             if ($banner === false) {
+                DB::rollBack();
                 session()->flash('danger', 'Oops! Something went wrong.');
                 return redirect()->back()->withInput();
             }
-    
+        
             DB::commit();
-            session()->flash('success', 'Noc Form has been submitted successfully.');
-            if($nocData->good_standing){
-            return redirect()->route('good-standing-main.index');
-            }
-            return redirect()->route('noc-main.index');
-        } catch (Exception $e) {
+            session()->flash('success', 'NOC Form has been submitted successfully.');
+        
+            return redirect()->route($nocData->good_standing ? 'good-standing-main.index' : 'noc-main.index');
+        
+        } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
-            session()->flash('error', 'Oops! Something went wrong.' . $e);
+            session()->flash('error', 'Oops! Something went wrong.');
             return redirect()->back()->withInput();
         }
+        
     }
 
 
