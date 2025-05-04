@@ -242,16 +242,29 @@ class NocController extends Controller
 
         $nocData = $applicant = $this->nocApplicationRepository->findOrFail($userId);
 
+        $nocId = $nocData->id;
         $url = url($nocData->pdf_link);
-        $qrCode = QrCode::size(100)->generate($url);
-        $qrCodeBase64 = 'data:image/png;base64,' . base64_encode($qrCode);
+        $qrFileName = 'qr_' . $nocId . '.svg';
+        $qrPath = public_path('storage/noc/' . $nocId . '/' . $qrFileName);
+
+        // Ensure directory exists
+        if (!file_exists(dirname($qrPath))) {
+            mkdir(dirname($qrPath), 0755, true);
+        }
+
+        // Generate and save SVG
+        file_put_contents($qrPath, QrCode::format('svg')->size(200)->generate($url));
+
+        // Pass the relative path to the view
+        $qrCodePath = 'storage/noc/' . $nocId . '/' . $qrFileName;
+
         $dobFormatted = Carbon::parse($nocData->dob_ad)->format('d M Y');
 
         if ($nocData->good_standing) {
             $pdf = Pdf::loadView('pdf.good_standing', [
                 'nocData' => $nocData,
                 'currentDate' => Carbon::now()->format('d-m-Y'),
-                'qrCode' => $qrCodeBase64,
+                'qrCode' => $qrCodePath,
                 'dob' => $dobFormatted,
                 'images' => $imagePaths,
                 'userId' => $userId,
@@ -261,7 +274,7 @@ class NocController extends Controller
             $pdf = Pdf::loadView('pdf.noc_registration', [
                 'nocData' => $nocData,
                 'currentDate' => Carbon::now()->format('Y-m-d'),
-                'qrCode' => $qrCodeBase64,
+                'qrCode' => $qrCodePath,
                 'images' => $imagePaths,
                 'userId' => $userId,
                 'applicant' => $applicant,

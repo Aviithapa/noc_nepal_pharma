@@ -237,7 +237,7 @@
                   <!-- Image Cell -->
                   <td style="width: 50%;  text-align: left; vertical-align: middle;">
                     <!-- Replace this text with your desired content -->
-                    <img src="{{ $qrCode }}" alt="QR Code">
+                    <img src="{{ $qrCode }}" alt="QR Code" height="100">
     
                   </td>
 
