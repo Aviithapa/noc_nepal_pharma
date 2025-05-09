@@ -159,6 +159,9 @@
                                                 <span class="badge bg-success-subtle text-success" style="font-size: 18px; text-transform: capitalize;">Approve</span>
                                             </a>
                                             @endif
+                                            <a class="download" href="{{ url('download-images-without-pdf/' .$data->id) }}" data-status="download" style="cursor: pointer;">
+                                                <span class="badge bg-success-subtle text-success" style="font-size: 18px; text-transform: capitalize;">Download without approve</span>
+                                            </a>
                                             <a class="btn-reject" data-id="{{ $data->id }}" data-status="rejected" style="cursor: pointer;">
                                                 <span class="badge bg-danger-subtle text-danger" style="font-size: 18px; text-transform: capitalize;">Reject</span>
                                             </a>

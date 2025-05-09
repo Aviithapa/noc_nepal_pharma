@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Master\MPharmaController;
 use App\Http\Controllers\Admin\NOC\NOCController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\GoodStanding\GoodStandingController;
 use Maatwebsite\Excel\Facades\Excel;
@@ -47,6 +48,9 @@ Route::post('export-data-good', function () {
 });
 
 Route::get('/download-images/{userId}', [CMSNocController::class, 'downloadImages']);
+Route::get('/download-images-without-pdf/{userId}', [CMSNocController::class, 'downloadImagesWithoutPdf']);
+Route::resource('dashboard/user', UserController::class)->middleware(['auth']);
+
 Route::get('/mpharma-download-images/{userId}', [MPharmacyController::class, 'downloadImages']);
 
 //NOC Normal User

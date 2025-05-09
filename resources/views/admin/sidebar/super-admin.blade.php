@@ -117,6 +117,13 @@
                 </a>
             </li>
 
+            <li class="side-nav-item">
+                <a href="{{ url('dashboard/user') }}" class="side-nav-link">
+                    <i class="bi-person"></i>
+                    <span> User Management </span>
+                </a>
+            </li>
+
             {{-- <li class="side-nav-item">
                 <a href="{{ url('cms/m-phamacy') }}" class="side-nav-link">
                     <i class="bi-file"></i>

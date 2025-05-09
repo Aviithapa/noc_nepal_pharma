@@ -286,4 +286,60 @@ class NocController extends Controller
         // Return the generated PDF for download
         return $pdf->download("{$applicant->title}_{$applicant->first_name}_{$applicant->last_name}.pdf");
     }
+
+    public function downloadImagesWithoutPdf($userId)
+    {
+        // Path to the folder containing images (adjust the folder structure as needed)
+        $folderPath = storage_path("app/public/noc/{$userId}/"); // This is the folder path where the images are stored
+
+        // Check if the folder exists
+        if (!File::exists($folderPath)) {
+            return response()->json(['error' => 'Folder not found.'], 404);
+        }
+
+        // Get all image files in the folder
+        $images = File::files($folderPath);
+
+        // Check if there are images in the folder
+        if (count($images) === 0) {
+            return response()->json(['error' => 'No images found.'], 404);
+        }
+
+        // Prepare the images data for the PDF (array of image paths)
+        $imagePaths = [];
+        foreach ($images as $image) {
+            // You can store the relative path or full URL depending on your requirement
+            $imagePaths[] = asset('storage/noc/' . $userId . '/' . basename($image));
+        }
+
+        $nocData = $applicant = $this->nocApplicationRepository->findOrFail($userId);
+
+
+
+        $dobFormatted = Carbon::parse($nocData->dob_ad)->format('d M Y');
+
+        if ($nocData->good_standing) {
+            $pdf = Pdf::loadView('pdf.good_standing_without_pdf', [
+                'nocData' => $nocData,
+                'currentDate' => Carbon::now()->format('d-m-Y'),
+                'dob' => $dobFormatted,
+                'images' => $imagePaths,
+                'userId' => $userId,
+                'applicant' => $applicant,
+            ]);
+        } else {
+            $pdf = Pdf::loadView('pdf.noc_registration_without_pdf', [
+                'nocData' => $nocData,
+                'currentDate' => Carbon::now()->format('Y-m-d'),
+                'images' => $imagePaths,
+                'userId' => $userId,
+                'applicant' => $applicant,
+            ]);
+        }
+        // Load a PDF view and pass the image paths to it
+        // $pdf = PDF::loadView('pdf.images', ['images' => $imagePaths, 'userId' => $userId, 'applicant' => $applicant]);
+
+        // Return the generated PDF for download
+        return $pdf->download("{$applicant->title}_{$applicant->first_name}_{$applicant->last_name}.pdf");
+    }
 }
